@@ -11,6 +11,7 @@ import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import com.grijalvaromero.carritoapp.configs.ConexionCliente
 import com.grijalvaromero.carritoapp.configs.Config
 import com.grijalvaromero.carritoapp.databinding.ActivityRegistroClienteBinding
 import org.json.JSONObject
@@ -67,6 +68,9 @@ class RegistroClienteActivity : AppCompatActivity() {
             params["apellidoCli"] = binding.editTextClienteApellido.text.toString()
             params["direccionCli"] = binding.editTextClienteDireccion.text.toString()
             params["contrasenia"] = binding.editTextClienteClave.text.toString()
+            params["correoCli"] = binding.editTextTextClienteCorreo.text.toString()
+
+
             val jsonObject = JSONObject(params as Map<*, *>?)
 
             // Volley post request with parameters
@@ -113,8 +117,52 @@ class RegistroClienteActivity : AppCompatActivity() {
         return true
     }
 
+    private fun validarCorreo(correo: String):Boolean{
+
+        var correoCorrecto =  false
+
+
+        var config = Config()
+        var url = config.ipServidor+ "Cliente"
+        var jsonObjectRequest = JsonObjectRequest(
+            Request.Method.GET, url, null,
+            Response.Listener { respuesta: JSONObject ->
+                var datos = respuesta.getJSONArray("data")
+                for (i in 0 until datos.length()){
+                    val item = datos.getJSONObject(i)
+                    Log.i("Cliente",item.getString("contrasenia"))
+                    if(correo == item.getString("correoCli").toString()){
+
+
+                        idCliente= item.getString("idCliente").toString()
+
+                    }
+                }
+                var conexion = ConexionCliente(this)
+                var  db = conexion.writableDatabase
+
+                if (bandera){
+
+                    db.execSQL("Insert into usuario (id_usuario) values ("+ idCliente +")")
+                    var inten = Intent(this,MainActivity::class.java)
+                    inten.putExtra("idCliente", "1")
+                    startActivity(inten)
+                }else{
+                    Toast.makeText(this,"Usuario o contraseña Incorrecto",Toast.LENGTH_LONG).show()
+                }
+
+            },
+            Response.ErrorListener {  },)
+
+        val queue = Volley.newRequestQueue(this)
+        queue.add(jsonObjectRequest)
+
+
+        return  correoCorrecto
+    }
 
     private fun validarCedula(cedula: String): Boolean {
+
 
         var cedulaCorrecta = false
 
