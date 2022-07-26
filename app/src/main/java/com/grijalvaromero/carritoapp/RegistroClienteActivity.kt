@@ -37,8 +37,10 @@ class RegistroClienteActivity : AppCompatActivity() {
         var clave= binding.editTextClienteClave.text.toString()
         var correo = binding.editTextTextClienteCorreo.text.toString()
         var bandera:Boolean= false
-            validarCorreo(correo)
+            Log.i("antes correo",correoBandera.toString())
 
+            validarCorreo(correo)
+        Log.i("despues corr",correoBandera.toString())
         if(validarCampos(binding)) {
             if(validarCedula(cedula)){
                 if(validarClave(clave)){
@@ -68,6 +70,7 @@ class RegistroClienteActivity : AppCompatActivity() {
         }
 
 
+            /*
 
         if(bandera){
             var config = Config()
@@ -109,6 +112,10 @@ class RegistroClienteActivity : AppCompatActivity() {
             queue.add(request)
 
         }
+
+
+
+             */
     }
 
     }
@@ -135,8 +142,8 @@ class RegistroClienteActivity : AppCompatActivity() {
                 for (i in 0 until datos.length()){
                     val item = datos.getJSONObject(i)
                     if(correo.equals(item.getString("correoCli").toString())){
-                        Log.i("Cliente","Si esta")
-                        correoBandera = false
+                        validacion
+
                     }
                 }
 
