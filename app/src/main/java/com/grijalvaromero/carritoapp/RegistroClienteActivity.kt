@@ -29,7 +29,6 @@ class RegistroClienteActivity : AppCompatActivity() {
 
         val binding = ActivityRegistroClienteBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         binding.buttonCliienteRegistrar.setOnClickListener {
         var cedula = binding.editTextClienteCedula.text.toString()
         var clave= binding.editTextClienteClave.text.toString()
