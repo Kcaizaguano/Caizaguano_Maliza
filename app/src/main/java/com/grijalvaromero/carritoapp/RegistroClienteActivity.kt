@@ -30,8 +30,6 @@ class RegistroClienteActivity : AppCompatActivity() {
         val binding = ActivityRegistroClienteBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
-
         binding.buttonCliienteRegistrar.setOnClickListener {
         var cedula = binding.editTextClienteCedula.text.toString()
         var clave= binding.editTextClienteClave.text.toString()
@@ -69,8 +67,6 @@ class RegistroClienteActivity : AppCompatActivity() {
             builder.show()
         }
 
-
-            /*
 
         if(bandera){
             var config = Config()
@@ -114,8 +110,6 @@ class RegistroClienteActivity : AppCompatActivity() {
         }
 
 
-
-             */
     }
 
     }
@@ -141,10 +135,13 @@ class RegistroClienteActivity : AppCompatActivity() {
                 var datos = respuesta.getJSONArray("data")
                 for (i in 0 until datos.length()){
                     val item = datos.getJSONObject(i)
-                    if(correo.equals(item.getString("correoCli").toString())){
-                        validacion
+                    if(correo == item.getString("correoCli").toString()){
+                        Log.i("Es correo","si es ")
 
+                        validacionCor()
                     }
+                    Log.i("Es correo","no es ")
+
                 }
 
             },
@@ -156,7 +153,9 @@ class RegistroClienteActivity : AppCompatActivity() {
 
     }
 
-
+   fun  validacionCor(){
+       correoBandera = false
+   }
 
     private fun validarCedula(cedula: String): Boolean {
 
