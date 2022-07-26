@@ -28,6 +28,7 @@ class RegistroClienteActivity : AppCompatActivity() {
     binding.buttonCliienteRegistrar.setOnClickListener {
         var cedula = binding.editTextClienteCedula.text.toString()
         var clave= binding.editTextClienteClave.text.toString()
+        var correo = binding.editTextTextClienteCorreo.text.toString()
         var bandera:Boolean= false
 
 
@@ -35,8 +36,13 @@ class RegistroClienteActivity : AppCompatActivity() {
         if(validarCampos(binding)) {
             if(validarCedula(cedula)){
                 if(validarClave(clave)){
+                    if(validarCorreo(correo)){
+                        bandera= true
 
-                    bandera= true
+                    }else{
+                        Toast.makeText(this,"Ya existe un correo con esa direccion",Toast.LENGTH_LONG).show()
+
+                    }
                 }else{
                     Toast.makeText(this,"La clave de tener minimo 4 caracteres, " +
                             "mayuscula, minuscula,numero,y  caracter especial",Toast.LENGTH_LONG).show()
@@ -69,7 +75,6 @@ class RegistroClienteActivity : AppCompatActivity() {
             params["direccionCli"] = binding.editTextClienteDireccion.text.toString()
             params["contrasenia"] = binding.editTextClienteClave.text.toString()
             params["correoCli"] = binding.editTextTextClienteCorreo.text.toString()
-
 
             val jsonObject = JSONObject(params as Map<*, *>?)
 
@@ -119,7 +124,7 @@ class RegistroClienteActivity : AppCompatActivity() {
 
     private fun validarCorreo(correo: String):Boolean{
 
-        var correoCorrecto =  false
+        var correoCorrecto =  true
 
 
         var config = Config()
@@ -130,25 +135,10 @@ class RegistroClienteActivity : AppCompatActivity() {
                 var datos = respuesta.getJSONArray("data")
                 for (i in 0 until datos.length()){
                     val item = datos.getJSONObject(i)
-                    Log.i("Cliente",item.getString("contrasenia"))
+                    //Log.i("Cliente",item.getString("contrasenia"))
                     if(correo == item.getString("correoCli").toString()){
-
-
-                        idCliente= item.getString("idCliente").toString()
-
+                        correoCorrecto = false
                     }
-                }
-                var conexion = ConexionCliente(this)
-                var  db = conexion.writableDatabase
-
-                if (bandera){
-
-                    db.execSQL("Insert into usuario (id_usuario) values ("+ idCliente +")")
-                    var inten = Intent(this,MainActivity::class.java)
-                    inten.putExtra("idCliente", "1")
-                    startActivity(inten)
-                }else{
-                    Toast.makeText(this,"Usuario o contraseña Incorrecto",Toast.LENGTH_LONG).show()
                 }
 
             },
@@ -212,9 +202,11 @@ class RegistroClienteActivity : AppCompatActivity() {
         var caracter = false;
 
         var bandera=false
+        var mayusculasContador =0
+        var minusculasContador = 0;
 
 
-        if (clave.length>=4){
+        if (clave.length>=6){
             for (item in clave)
             {
                 Log.i("clave",item.toString())
