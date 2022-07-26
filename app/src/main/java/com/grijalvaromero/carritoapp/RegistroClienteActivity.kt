@@ -34,10 +34,10 @@ class RegistroClienteActivity : AppCompatActivity() {
         var clave= binding.editTextClienteClave.text.toString()
         var correo = binding.editTextTextClienteCorreo.text.toString()
         var bandera:Boolean= false
-            Log.i("antes correo",correoBandera.toString())
+
 
             validarCorreo(correo)
-        Log.i("despues corr",correoBandera.toString())
+
         if(validarCampos(binding)) {
             if(validarCedula(cedula)){
                 if(validarClave(clave)){
