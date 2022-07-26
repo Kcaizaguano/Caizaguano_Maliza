@@ -3,9 +3,11 @@ package com.grijalvaromero.carritoapp
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
 import com.android.volley.Response
@@ -18,6 +20,9 @@ import org.json.JSONObject
 
 
 class RegistroClienteActivity : AppCompatActivity() {
+
+    private var correoBandera:Boolean= true
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
        // setContentView(R.layout.activity_registro_cliente)
@@ -25,18 +30,19 @@ class RegistroClienteActivity : AppCompatActivity() {
         val binding = ActivityRegistroClienteBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-    binding.buttonCliienteRegistrar.setOnClickListener {
+
+
+        binding.buttonCliienteRegistrar.setOnClickListener {
         var cedula = binding.editTextClienteCedula.text.toString()
         var clave= binding.editTextClienteClave.text.toString()
         var correo = binding.editTextTextClienteCorreo.text.toString()
         var bandera:Boolean= false
-
-
+            validarCorreo(correo)
 
         if(validarCampos(binding)) {
             if(validarCedula(cedula)){
                 if(validarClave(clave)){
-                    if(validarCorreo(correo)){
+                    if(correoBandera){
                         bandera= true
 
                     }else{
@@ -60,7 +66,6 @@ class RegistroClienteActivity : AppCompatActivity() {
             }
             builder.show()
         }
-
 
 
 
@@ -104,10 +109,7 @@ class RegistroClienteActivity : AppCompatActivity() {
             queue.add(request)
 
         }
-
-
     }
-
 
     }
 
@@ -122,10 +124,7 @@ class RegistroClienteActivity : AppCompatActivity() {
         return true
     }
 
-    private fun validarCorreo(correo: String):Boolean{
-
-        var correoCorrecto =  true
-
+    private fun validarCorreo(correo: String){
 
         var config = Config()
         var url = config.ipServidor+ "Cliente"
@@ -137,8 +136,7 @@ class RegistroClienteActivity : AppCompatActivity() {
                     val item = datos.getJSONObject(i)
                     if(correo.equals(item.getString("correoCli").toString())){
                         Log.i("Cliente","Si esta")
-                     correoCorrecto = false
-
+                        correoBandera = false
                     }
                 }
 
@@ -149,13 +147,11 @@ class RegistroClienteActivity : AppCompatActivity() {
         queue.add(jsonObjectRequest)
 
 
-        return  correoCorrecto
     }
 
 
 
     private fun validarCedula(cedula: String): Boolean {
-
 
         var cedulaCorrecta = false
 
