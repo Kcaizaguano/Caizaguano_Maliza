@@ -215,6 +215,7 @@ class RegistroClienteActivity : AppCompatActivity() {
                 if (Character.isDigit(item))   numero = true
                // if (Character.isUpperCase(item)) mayuscula = true
                 if (Character.isUpperCase(item)) mayusculasContador++
+                Log.i("matyuscula",mayusculasContador.toString())
                 //if (Character.isLowerCase(item)) minuscula = true
                 if (Character.isLowerCase(item)) minusculasContador++
                 if(!Character.isLetterOrDigit(item)) caracter = true
@@ -224,8 +225,8 @@ class RegistroClienteActivity : AppCompatActivity() {
             bandera=false
         }
 
-        if (mayusculasContador>2) mayuscula = true
-        if (minusculasContador>2) minuscula = true
+        if (mayusculasContador>=2) mayuscula = true
+        if (minusculasContador>=2) minuscula = true
 
         if (numero && mayuscula && minuscula && caracter)  bandera = true
 
