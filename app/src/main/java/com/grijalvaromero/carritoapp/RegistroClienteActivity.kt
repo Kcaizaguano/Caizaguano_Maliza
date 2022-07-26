@@ -44,7 +44,7 @@ class RegistroClienteActivity : AppCompatActivity() {
 
                     }
                 }else{
-                    Toast.makeText(this,"La clave de tener minimo 4 caracteres, " +
+                    Toast.makeText(this,"La clave de tener minimo 6 caracteres, " +
                             "mayuscula, minuscula,numero,y  caracter especial",Toast.LENGTH_LONG).show()
                 }
             }else{
@@ -124,7 +124,7 @@ class RegistroClienteActivity : AppCompatActivity() {
 
     private fun validarCorreo(correo: String):Boolean{
 
-        var correoCorrecto =  true
+        var correoCorrecto =  false
 
 
         var config = Config()
@@ -135,9 +135,9 @@ class RegistroClienteActivity : AppCompatActivity() {
                 var datos = respuesta.getJSONArray("data")
                 for (i in 0 until datos.length()){
                     val item = datos.getJSONObject(i)
-                    //Log.i("Cliente",item.getString("contrasenia"))
-                    if(correo == item.getString("correoCli").toString()){
-                        correoCorrecto = false
+                    if(correo.equals(item.getString("correoCli").toString())){
+                        Log.i("Cliente","Si esta")
+
                     }
                 }
 
