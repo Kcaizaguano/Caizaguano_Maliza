@@ -31,35 +31,18 @@ class RegistroClienteActivity : AppCompatActivity() {
         var correo = binding.editTextTextClienteCorreo.text.toString()
         var bandera:Boolean= false
 
-        var config = Config()
-        var url = config.ipServidor+ "Cliente"
-        var jsonObjectRequest = JsonObjectRequest(
-            Request.Method.GET, url, null,
-            Response.Listener { respuesta: JSONObject ->
-                var datos = respuesta.getJSONArray("data")
-                for (i in 0 until datos.length()){
-                    val item = datos.getJSONObject(i)
-                    if(correo.equals(item.getString("correoCli").toString())){
-
-
-                    }
-                }
-
-            },
-            Response.ErrorListener {  },)
-
-        val queue = Volley.newRequestQueue(this)
-        queue.add(jsonObjectRequest)
-
 
 
         if(validarCampos(binding)) {
             if(validarCedula(cedula)){
                 if(validarClave(clave)){
-
+                    if(validarCorreo(correo)){
                         bandera= true
 
+                    }else{
+                        Toast.makeText(this,"Ya existe un correo con esa direccion",Toast.LENGTH_LONG).show()
 
+                    }
                 }else{
                     Toast.makeText(this,"La clave de tener minimo 6 caracteres, " +
                             "mayuscula, minuscula,numero,y  caracter especial",Toast.LENGTH_LONG).show()
@@ -154,7 +137,7 @@ class RegistroClienteActivity : AppCompatActivity() {
                     val item = datos.getJSONObject(i)
                     if(correo.equals(item.getString("correoCli").toString())){
                         Log.i("Cliente","Si esta")
-                        correo()
+                     correoCorrecto = false
 
                     }
                 }
@@ -169,11 +152,7 @@ class RegistroClienteActivity : AppCompatActivity() {
         return  correoCorrecto
     }
 
-    private  fun correo():Boolean{
 
-        return  false
-
-    }
 
     private fun validarCedula(cedula: String): Boolean {
 
@@ -227,22 +206,26 @@ class RegistroClienteActivity : AppCompatActivity() {
 
         var bandera=false
         var mayusculasContador =0
-        var minusculasContador = 0;
+        var minusculasContador = 0
 
 
         if (clave.length>=6){
             for (item in clave)
             {
-                Log.i("clave",item.toString())
                 if (Character.isDigit(item))   numero = true
-                if (Character.isUpperCase(item)) mayuscula = true
-                if (Character.isLowerCase(item)) minuscula = true
+               // if (Character.isUpperCase(item)) mayuscula = true
+                if (Character.isUpperCase(item)) mayusculasContador++
+                //if (Character.isLowerCase(item)) minuscula = true
+                if (Character.isLowerCase(item)) minusculasContador++
                 if(!Character.isLetterOrDigit(item)) caracter = true
             }
 
         }else{
             bandera=false
         }
+
+        if (mayusculasContador>2) mayuscula = true
+        if (minusculasContador>2) minuscula = true
 
         if (numero && mayuscula && minuscula && caracter)  bandera = true
 
